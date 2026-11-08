@@ -1,0 +1,168 @@
+:host {
+  display: block;
+  font-family: 'Sora', 'Inter', sans-serif;
+}
+
+.inicio-hero {
+  position: relative;
+  overflow: hidden;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 40px 32px 140px;
+  text-align: center;
+  color: #0A1430;
+  background: radial-gradient(ellipse 60% 55% at 50% 66%, #FFFFFF 0%, #EEF0F3 60%, #E4E8EE 100%);
+  text-shadow: 0 0 18px rgba(255, 255, 255, 0.9);
+}
+
+.inicio-hero__video {
+  position: absolute;
+  z-index: 0;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  filter: brightness(1.05) saturate(1.1) contrast(1.02);
+  pointer-events: none;
+}
+
+.inicio-hero__overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background: linear-gradient(180deg, rgba(228, 232, 238, 0.55) 0%, rgba(228, 232, 238, 0.25) 35%, rgba(228, 232, 238, 0.55) 70%, rgba(228, 232, 238, 0.85) 100%);
+}
+
+.inicio-hero__content {
+  position: relative;
+  z-index: 1;
+  max-width: 1344px;
+  margin: 0 auto;
+}
+
+.inicio-hero__eyebrow {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 18px;
+}
+
+.inicio-hero__eyebrow-side {
+  display: flex;
+  align-items: center;
+  width: 120px;
+}
+
+.inicio-hero__eyebrow-bar {
+  flex: 1;
+  height: 1px;
+  background: linear-gradient(90deg, rgba(24, 105, 217, 0), #1869D9);
+}
+
+.inicio-hero__eyebrow-side--right .inicio-hero__eyebrow-bar {
+  background: linear-gradient(90deg, #1869D9, rgba(24, 105, 217, 0));
+}
+
+.inicio-hero__eyebrow-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 999px;
+  background: #86EA2D;
+  box-shadow: 0 0 0 3px rgba(24, 105, 217, 0.25), 0 0 10px 2px rgba(134, 234, 45, 0.7);
+}
+
+.inicio-hero__eyebrow-text {
+  margin: 0;
+  font-size: clamp(13px, 1.25vw, 18px);
+  font-weight: 600;
+  letter-spacing: 0.48em;
+  text-transform: uppercase;
+}
+
+.inicio-hero__title {
+  margin: 14px 0 0;
+  padding-left: 0.08em;
+  font-size: clamp(56px, 10.5vw, 150px);
+  line-height: 1;
+  font-weight: 400;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #0A1430;
+  text-shadow: 0 0 28px rgba(255, 255, 255, 0.95), 0 0 60px rgba(255, 255, 255, 0.7);
+}
+
+.inicio-hero__title-accent {
+  font-weight: 700;
+  color: #86EA2D;
+}
+
+.inicio-hero__subtitle {
+  margin: 10px auto 0;
+  max-width: 560px;
+  font-size: 20px;
+  line-height: 1.5;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+}
+
+.inicio-hero__spacer {
+  margin-top: 8px;
+  height: 60px;
+}
+
+.inicio-hero__actions {
+  margin-top: 20px;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  gap: 14px 24px;
+  text-shadow: none;
+}
+
+.inicio-hero__cta {
+  min-height: 58px;
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  padding: 0 32px;
+  border-radius: 999px;
+  text-decoration: none;
+  font-weight: 700;
+  font-size: 19px;
+  letter-spacing: 0.04em;
+}
+
+.inicio-hero__cta--primary {
+  background: linear-gradient(180deg, #A4F25C 0%, #86EA2D 100%);
+  color: #0A1430;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.85),
+    inset 0 -2px 6px rgba(10, 20, 48, 0.12),
+    0 10px 24px rgba(134, 234, 45, 0.45);
+}
+
+.inicio-hero__cta--secondary {
+  padding: 0 30px;
+  border: 1px solid rgba(255, 255, 255, 0.85);
+  background: rgba(220, 226, 235, 0.45);
+  backdrop-filter: blur(16px) saturate(160%);
+  -webkit-backdrop-filter: blur(16px) saturate(160%);
+  color: #0A1430;
+  font-weight: 600;
+  font-size: 15px;
+  letter-spacing: 0.08em;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.9),
+    0 8px 20px rgba(10, 20, 48, 0.12);
+}
+
+@media screen and (max-width: 650px) {
+  .inicio-hero {
+    padding: 32px 20px 160px;
+  }
+}
