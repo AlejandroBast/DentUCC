@@ -1,0 +1,61 @@
+<header class="navbar">
+  <div class="navbar__contenido">
+    <a routerLink="/inicio" class="marca" (click)="menuAbierto.set(false)">
+      <span class="marca__icono">
+        <svg
+          aria-hidden="true"
+          width="22"
+          height="22"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="#1869D9"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        >
+          <path
+            d="M7 3c-2 0-3.5 1.6-3.5 4 0 2 .8 3.4 1.3 5.2.5 2 .6 4.3 1.2 6.3.4 1.4 1 2.5 1.9 2.5 1.2 0 1.4-2 1.8-4 .3-1.4.8-2.5 2.3-2.5s2 1.1 2.3 2.5c.4 2 .6 4 1.8 4 .9 0 1.5-1.1 1.9-2.5.6-2 .7-4.3 1.2-6.3.5-1.8 1.3-3.2 1.3-5.2 0-2.4-1.5-4-3.5-4-1.8 0-3 1-5 1S8.8 3 7 3z"
+          />
+        </svg>
+      </span>
+      DentUCC
+    </a>
+
+    <nav
+      id="menu-principal"
+      aria-label="Principal"
+      class="enlaces"
+      [ngClass]="{ 'enlaces--visible': menuAbierto() }"
+    >
+      @for (enlace of enlaces(); track enlace.ruta) {
+        <app-nav-item [enlace]="enlace" (seleccionado)="alNavegar($event)" />
+      }
+    </nav>
+
+    <button
+      type="button"
+      class="hamburguesa"
+      aria-controls="menu-principal"
+      [attr.aria-expanded]="menuAbierto()"
+      [attr.aria-label]="menuAbierto() ? 'Cerrar menú' : 'Abrir menú'"
+      (click)="alternarMenu()"
+    >
+      <svg
+        aria-hidden="true"
+        width="24"
+        height="24"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+        stroke-linecap="round"
+      >
+        @if (menuAbierto()) {
+          <path d="M6 6l12 12M18 6 6 18" />
+        } @else {
+          <path d="M4 7h16M4 12h16M4 17h16" />
+        }
+      </svg>
+    </button>
+  </div>
+</header>

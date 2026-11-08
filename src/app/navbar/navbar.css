@@ -1,0 +1,90 @@
+.navbar {
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  background: #1869d9;
+  padding: 0 32px;
+  font-family: Inter, system-ui, sans-serif;
+}
+
+.navbar__contenido {
+  max-width: 1344px;
+  margin: 0 auto;
+  min-height: 72px;
+  padding: 12px 0;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 12px 48px;
+  transition: min-height 0.2s ease;
+}
+
+.marca {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: #ffffff;
+  text-decoration: none;
+  font-weight: 800;
+  font-size: 21px;
+  letter-spacing: -0.01em;
+}
+
+.marca__icono {
+  width: 38px;
+  height: 38px;
+  border-radius: 12px;
+  background: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.enlaces {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+}
+
+.hamburguesa {
+  display: none;
+  width: 44px;
+  height: 44px;
+  align-items: center;
+  justify-content: center;
+  border: 0;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.15);
+  color: #ffffff;
+  cursor: pointer;
+}
+
+/* Celular y tablet: los enlaces se esconden detrás del botón hamburguesa */
+@media (max-width: 900px) {
+  .navbar {
+    padding: 0 16px;
+  }
+
+  /* En celular: logo a la izquierda y botón ☰ a la derecha */
+  .navbar__contenido {
+    justify-content: space-between;
+  }
+
+  .hamburguesa {
+    display: inline-flex;
+  }
+
+  .enlaces {
+    display: none;
+    order: 3;
+    width: 100%;
+    flex-direction: column;
+    align-items: center;
+    padding-bottom: 8px;
+  }
+
+  .enlaces--visible {
+    display: flex;
+  }
+}

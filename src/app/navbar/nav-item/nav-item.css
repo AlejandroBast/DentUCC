@@ -1,0 +1,32 @@
+:host {
+  display: contents;
+}
+
+.enlace {
+  min-height: 44px;
+  display: inline-flex;
+  align-items: center;
+  padding: 0 18px;
+  border-radius: 999px;
+  color: #ffffff;
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 15px;
+  transition: background 0.2s ease, color 0.2s ease;
+}
+
+.enlace:hover {
+  background: rgba(255, 255, 255, 0.15);
+}
+
+.enlace:focus-visible {
+  outline: 2px solid #ffffff;
+  outline-offset: 2px;
+}
+
+.enlace--activo,
+.enlace--activo:hover {
+  background: #86ea2d;
+  color: #0a1430;
+  font-weight: 700;
+}

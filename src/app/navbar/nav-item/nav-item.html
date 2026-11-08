@@ -1,0 +1,11 @@
+<a
+  class="enlace"
+  [routerLink]="enlace().ruta"
+  routerLinkActive
+  #rla="routerLinkActive"
+  [ngClass]="{ 'enlace--activo': rla.isActive }"
+  [attr.aria-current]="rla.isActive ? 'page' : null"
+  (click)="alSeleccionar()"
+>
+  {{ enlace().texto }}
+</a>
