@@ -1,0 +1,22 @@
+<span class="tarjeta-orientacion__insignia">Orientación educativa</span>
+<h2 class="tarjeta-orientacion__titulo">{{ orientacion().titulo }}</h2>
+
+<ul class="tarjeta-orientacion__puntos">
+  @for (punto of orientacion().puntos; track punto) {
+    <li>{{ punto }}</li>
+  }
+</ul>
+
+<p class="tarjeta-orientacion__aviso">
+  Apoyo al aprendizaje: el diagnóstico definitivo lo confirma tu docente.
+</p>
+
+<div class="tarjeta-orientacion__acciones">
+  <a class="tarjeta-orientacion__boton" routerLink="/registro">Volver al registro</a>
+  <a
+    class="tarjeta-orientacion__boton tarjeta-orientacion__boton--principal"
+    routerLink="/recomendaciones"
+  >
+    Ver recomendaciones
+  </a>
+</div>

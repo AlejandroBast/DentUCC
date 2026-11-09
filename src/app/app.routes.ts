@@ -7,7 +7,10 @@ import { Demo } from './demo/demo';
 export const routes: Routes = [
   { path: '', component: Inicio },
   { path: 'registro', component: Demo },
-  { path: 'diagnostico', component: Placeholder },
+  {
+    path: 'diagnostico',
+    loadComponent: () => import('./diagnostico/diagnostico').then((m) => m.Diagnostico),
+  },
   { path: 'recomendaciones', component: Recomendaciones },
   { path: 'historial', component: Placeholder },
 ];

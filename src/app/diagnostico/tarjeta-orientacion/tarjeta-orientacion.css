@@ -1,0 +1,94 @@
+:host {
+  display: block;
+  padding: 18px 18px 20px;
+  border-radius: 18px;
+  color: #ffffff;
+  background: linear-gradient(160deg, #2a7cf0 0%, #1c63da 60%, #1757c8 100%);
+  box-shadow: 0 14px 30px rgba(28, 99, 218, 0.35);
+}
+
+.tarjeta-orientacion__insignia {
+  display: inline-block;
+  padding: 4px 10px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.2);
+  font-size: 9.5px;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.tarjeta-orientacion__titulo {
+  margin: 12px 0 14px;
+  font-family: 'Sora', 'Inter', sans-serif;
+  font-size: 18px;
+  font-weight: 700;
+  line-height: 1.3;
+}
+
+.tarjeta-orientacion__puntos {
+  margin: 0;
+  padding: 0 0 14px;
+  list-style: none;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.25);
+}
+
+.tarjeta-orientacion__puntos li {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 10px;
+  font-size: 12px;
+  font-weight: 600;
+  line-height: 1.45;
+}
+
+.tarjeta-orientacion__puntos li::before {
+  content: '✓';
+  flex: none;
+  font-weight: 800;
+  color: #86ea2d;
+}
+
+.tarjeta-orientacion__aviso {
+  margin: 14px 0 16px;
+  font-size: 11.5px;
+  line-height: 1.45;
+  opacity: 0.9;
+}
+
+.tarjeta-orientacion__acciones {
+  display: grid;
+  gap: 10px;
+}
+
+.tarjeta-orientacion__boton {
+  display: block;
+  padding: 11px 16px;
+  border: 1.5px solid rgba(255, 255, 255, 0.75);
+  border-radius: 999px;
+  font-size: 13px;
+  font-weight: 800;
+  text-align: center;
+  text-decoration: none;
+  color: #ffffff;
+  transition:
+    transform 0.15s,
+    background 0.2s;
+}
+
+.tarjeta-orientacion__boton:hover {
+  background: rgba(255, 255, 255, 0.12);
+  transform: translateY(-1px);
+}
+
+.tarjeta-orientacion__boton:focus-visible {
+  outline: 2px solid #86ea2d;
+  outline-offset: 2px;
+}
+
+.tarjeta-orientacion__boton--principal,
+.tarjeta-orientacion__boton--principal:hover {
+  border-color: #ffffff;
+  background: #ffffff;
+  color: #1556c4;
+}
