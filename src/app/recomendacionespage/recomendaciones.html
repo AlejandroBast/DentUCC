@@ -16,19 +16,27 @@
 </svg>
 
 <header class="hero">
-  <div class="barra">
-    <div class="chips">
-      <span class="chip chip-paciente"><i class="punto"></i>Paciente: <b>{{ paciente.nombre }}</b></span>
-      <span class="chip chip-hc">{{ paciente.historia }}</span>
-      <span class="area">{{ paciente.area }}</span>
+  <div class="hero__content">
+    <div class="eyebrow">
+      <span class="eyebrow__side" aria-hidden="true">
+        <span class="eyebrow__bar"></span>
+        <span class="eyebrow__dot"></span>
+      </span>
+      <p class="eyebrow__text">Guías personalizadas</p>
+      <span class="eyebrow__side eyebrow__side--right" aria-hidden="true">
+        <span class="eyebrow__dot"></span>
+        <span class="eyebrow__bar"></span>
+      </span>
     </div>
-    <span class="sync"><svg class="ic"><use href="#i-ok"/></svg>Sondaje periodontal sincronizado</span>
-  </div>
 
-  <div class="titulo-fila">
-    <div>
-      <h1>RECOMENDACIONES <span>EDUCATIVAS</span></h1>
-      <p>Guías clínicas y pautas de higiene personalizadas basadas en el registro periodontal.</p>
+    <h1 class="hero__title">Recomen<span>daciones</span></h1>
+    <p class="hero__subtitle">Pautas de higiene y criterios clínicos basados en el registro periodontal.</p>
+
+    <div class="paciente">
+      <span class="chip"><i class="punto"></i>Paciente: <b>{{ paciente.nombre }}</b></span>
+      <span class="chip chip--mono">{{ paciente.historia }}</span>
+      <span class="chip">{{ paciente.area }}</span>
+      <span class="chip chip--ok"><svg class="ic"><use href="#i-ok"/></svg>Sondaje sincronizado</span>
     </div>
 
     <div class="acciones">
@@ -39,16 +47,17 @@
           </button>
         }
       </div>
-      <span class="sep" aria-hidden="true"></span>
-      <button type="button" class="icono" aria-label="Compartir" (click)="compartir()">
-        <svg class="ic"><use href="#i-compartir"/></svg>
-      </button>
-      <button type="button" class="icono" aria-label="Copiar recomendaciones" (click)="copiar()">
-        <svg class="ic"><use href="#i-copiar"/></svg>
-      </button>
-      <button type="button" class="exportar" (click)="exportar()">
-        <svg class="ic"><use href="#i-descarga"/></svg>Exportar PDF
-      </button>
+      <div class="acciones__botones">
+        <button type="button" class="icono" aria-label="Compartir" title="Compartir" (click)="compartir()">
+          <svg class="ic"><use href="#i-compartir"/></svg>
+        </button>
+        <button type="button" class="icono" aria-label="Copiar recomendaciones" title="Copiar" (click)="copiar()">
+          <svg class="ic"><use href="#i-copiar"/></svg>
+        </button>
+        <button type="button" class="exportar" (click)="exportar()">
+          <svg class="ic"><use href="#i-descarga"/></svg>Exportar PDF
+        </button>
+      </div>
     </div>
   </div>
 </header>
