@@ -1,0 +1,61 @@
+<app-encabezado-fase
+  [fase]="2"
+  titulo="Orientación"
+  destacado="diagnóstica"
+  [subtitulo]="subtitulo()"
+  [pasos]="pasos()"
+/>
+
+<main class="diagnostico__contenido">
+  <section class="diagnostico__kpis">
+    <article class="diagnostico__kpi">
+      <h2 class="diagnostico__kpi-titulo">Profundidad de sondaje promedio</h2>
+      <p class="diagnostico__kpi-valor">
+        {{ formatear(resumen().profundidadPromedio, 1) }}
+        <span class="diagnostico__unidad">mm</span>
+      </p>
+      <p class="diagnostico__kpi-nota">Promedio de {{ resumen().sitiosRegistrados }} sitios</p>
+    </article>
+
+    <article class="diagnostico__kpi">
+      <h2 class="diagnostico__kpi-titulo">Sangrado al sondaje</h2>
+      <p class="diagnostico__kpi-valor">
+        {{ formatear(resumen().porcentajeSangrado) }}
+        <span class="diagnostico__unidad">%</span>
+      </p>
+      <p class="diagnostico__kpi-nota">
+        {{ resumen().sitiosConSangrado }} de {{ resumen().sitiosRegistrados }} sitios · umbral de
+        referencia 10 %
+      </p>
+    </article>
+
+    <article class="diagnostico__kpi">
+      <h2 class="diagnostico__kpi-titulo">Dientes afectados</h2>
+      <p class="diagnostico__kpi-valor">
+        {{ resumen().dientesAfectados.length }}
+        <span class="diagnostico__unidad">de {{ resumen().dientesRegistrados }}</span>
+      </p>
+      <ul class="diagnostico__chips">
+        @for (diente of resumen().dientesAfectados; track diente) {
+          <li>{{ diente }}</li>
+        }
+      </ul>
+    </article>
+
+    <article class="diagnostico__kpi">
+      <h2 class="diagnostico__kpi-titulo">Sitios con sondaje ≥ 4 mm</h2>
+      <p class="diagnostico__kpi-valor">
+        {{ resumen().sitios4mm }}
+        <span class="diagnostico__unidad">sitios</span>
+      </p>
+      <p class="diagnostico__kpi-nota">
+        {{ formatear(resumen().porcentajeSitios4mm) }} % de los sitios registrados
+      </p>
+    </article>
+  </section>
+
+  <section class="diagnostico__fila">
+    <app-grafica-cuadrantes [cuadrantes]="resumen().cuadrantes" />
+    <app-tarjeta-orientacion [orientacion]="orientacion()" />
+  </section>
+</main>
