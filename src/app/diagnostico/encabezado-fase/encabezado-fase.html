@@ -1,0 +1,31 @@
+<header class="encabezado-fase">
+  <div class="encabezado-fase__contenido">
+    <p class="encabezado-fase__fase">
+      <span class="encabezado-fase__punto"></span>Fase {{ fase() }}
+    </p>
+    <h1 class="encabezado-fase__titulo">
+      {{ titulo() }} <strong>{{ destacado() }}</strong>
+    </h1>
+    @if (subtitulo()) {
+      <p class="encabezado-fase__subtitulo">{{ subtitulo() }}</p>
+    }
+
+    <ol class="encabezado-fase__pasos">
+      @for (paso of pasos(); track paso.numero) {
+        <li class="encabezado-fase__paso" [class]="'encabezado-fase__paso--' + paso.estado">
+          <span class="encabezado-fase__circulo">
+            @if (paso.estado === 'hecho') {
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5" /></svg>
+            } @else {
+              {{ paso.numero }}
+            }
+          </span>
+          <span class="encabezado-fase__texto">
+            <strong>{{ paso.titulo }}</strong>
+            <small>{{ paso.detalle }}</small>
+          </span>
+        </li>
+      }
+    </ol>
+  </div>
+</header>
