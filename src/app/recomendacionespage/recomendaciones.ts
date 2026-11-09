@@ -17,8 +17,8 @@ interface Recomendacion {
 
 @Component({
   selector: 'app-recomendaciones',
-  templateUrl: './recomendaciones (1).html',
-  styleUrl: './recomendaciones (1).css',
+  templateUrl: './recomendaciones.html',
+  styleUrl: './recomendaciones.css',
 })
 export class Recomendaciones {
   // ===== Datos del paciente (luego vienen del backend) =====
