@@ -1,18 +1,27 @@
-import { Component, computed, signal } from '@angular/core';
+import { Component, signal } from '@angular/core';
 
-type Tipo = 'paciente' | 'repasar';
-type Filtro = 'todas' | Tipo;
-type Tono = 'rojo' | 'azul' | 'gris' | 'ambar';
+interface Paso {
+  numero: number;
+  icono: string;
+  titulo: string;
+  texto: string;
+}
 
 interface Recomendacion {
-  tipo: Tipo;
   icono: string;
   etiqueta: string;
   titulo: string;
   texto: string;
-  dato: string;
-  tono: Tono;
-  pendiente?: boolean;
+}
+
+interface Comando {
+  nombre: string;
+  uso: string;
+}
+
+interface Pregunta {
+  pregunta: string;
+  respuesta: string;
 }
 
 @Component({
@@ -21,81 +30,105 @@ interface Recomendacion {
   styleUrl: './recomendaciones.css',
 })
 export class Recomendaciones {
-  // ===== Datos del paciente (luego vienen del backend) =====
-  paciente = {
-    nombre: 'Mario González Morales',
-    historia: 'HC-0142',
-    area: 'Odontología y Periodoncia',
-  };
+  pasos: Paso[] = [
+    {
+      numero: 1,
+      icono: 'preparar',
+      titulo: 'Preparar',
+      texto: 'Antes de ponerse los guantes, abra DentUCC, ingrese los datos del examen y active el dictado.',
+    },
+    {
+      numero: 2,
+      icono: 'dictado',
+      titulo: 'Dictar',
+      texto: 'Diga el diente, la cara y los valores en orden. Use los comandos de voz para controlar el registro.',
+    },
+    {
+      numero: 3,
+      icono: 'revisar',
+      titulo: 'Revisar',
+      texto: 'Al terminar, compruebe los valores dudosos, el NIC y la gráfica antes de exportar el PDF.',
+    },
+  ];
 
-  // ===== Recomendaciones =====
   recomendaciones: Recomendacion[] = [
     {
-      tipo: 'paciente', icono: 'pincel', etiqueta: 'Cepillado', tono: 'rojo',
-      titulo: 'Técnica de Bass modificada',
-      texto: 'Cepillo a 45° hacia el surco gingival, con movimientos vibratorios cortos. Insistir especialmente en las zonas que sangraron.',
-      dato: '26 sitios sangrantes',
+      icono: 'preparar',
+      etiqueta: 'Antes del examen',
+      titulo: 'Prepare antes de los guantes',
+      texto: 'Abra DentUCC, ingrese los datos del examen y active el dictado antes de empezar. Después no necesitará tocar el dispositivo.',
     },
     {
-      tipo: 'paciente', icono: 'espacios', etiqueta: 'Espacios', tono: 'gris',
-      titulo: 'Limpieza interdental diaria',
-      texto: 'Cepillos interproximales o seda dental en los molares con bolsas periodontales de 4–5 mm para remoción de biopelícula.',
-      dato: 'Dientes 16 · 17 · 26 · 36 · 46 · 47',
+      icono: 'dispositivo',
+      etiqueta: 'Ubicación',
+      titulo: 'Ubique bien el dispositivo',
+      texto: 'Déjelo a unos 30–50 cm, estable y con el micrófono despejado.',
     },
     {
-      tipo: 'paciente', icono: 'ojo', etiqueta: 'Biopelícula', tono: 'azul',
-      titulo: 'Control con revelador',
-      texto: 'Registra el índice y muestra al paciente con revelador de placa dónde se acumula la biopelícula para motivar su técnica.',
-      dato: "Índice de O'Leary",
+      icono: 'microfono',
+      etiqueta: 'Configuración',
+      titulo: 'Use un navegador compatible',
+      texto: 'Use Chrome o Edge actualizados, permita el acceso al micrófono y mantenga una conexión a internet.',
     },
     {
-      tipo: 'repasar', icono: 'regla', etiqueta: 'NIC', tono: 'gris',
-      titulo: 'Nivel de inserción clínica',
-      texto: 'Registra el margen gingival respecto a la unión amelocementaria; sin NIC no puedes estadificar una periodontitis.',
-      dato: 'Clasificación AAP / EFP 2017',
+      icono: 'dictado',
+      etiqueta: 'Dictado',
+      titulo: 'Dicte con claridad',
+      texto: 'Diga el diente, la cara y los valores en orden. Por ejemplo: “diente 16 vestibular 3-2-4”. Espere la confirmación de cada valor.',
     },
     {
-      tipo: 'repasar', icono: 'libro', etiqueta: 'Diagnóstico', tono: 'gris',
-      titulo: 'Bolsa o pseudobolsa',
-      texto: 'Repasa cómo diferenciar una bolsa verdadera de un agrandamiento gingival antes de interpretar sondajes de 4 mm.',
-      dato: 'Sondajes de 4 mm: 19 sitios',
+      icono: 'revisar',
+      etiqueta: 'Corrección',
+      titulo: 'Corrija al instante',
+      texto: 'Si se equivoca, diga “corregir” y repita el valor.',
     },
     {
-      tipo: 'repasar', icono: 'lista', etiqueta: 'Pendiente', tono: 'ambar', pendiente: true,
-      titulo: 'Completa la ficha',
-      texto: 'Faltan 27 sitios. Un registro completo hace más confiable el resumen y diagnósticos preventivos de la fase 2.',
-      dato: '165 de 192 sitios',
+      icono: 'revisar',
+      etiqueta: 'Cierre',
+      titulo: 'Revise al terminar',
+      texto: 'Verifique los valores marcados como dudosos, el NIC y la gráfica; luego exporte el PDF.',
+    },
+    {
+      icono: 'cuidado',
+      etiqueta: 'Privacidad',
+      titulo: 'Proteja la información',
+      texto: 'En esta versión demostrativa, use solo datos ficticios.',
+    },
+    {
+      icono: 'cuidado',
+      etiqueta: 'Criterio profesional',
+      titulo: 'El criterio es suyo',
+      texto: 'La orientación diagnóstica es preliminar y debe confirmarla el docente o profesional.',
     },
   ];
 
-  // ===== Secciones y filtros =====
-  secciones = [
-    { tipo: 'paciente' as Tipo, titulo: 'Para el paciente', sub: 'guías prácticas', nota: 'Autocuidado y cepillado en casa', color: 'lima' },
-    { tipo: 'repasar' as Tipo, titulo: 'Para repasar', sub: 'criterios diagnósticos', nota: 'Normativa de diagnóstico y estadificación', color: 'azul' },
+  comandos: Comando[] = [
+    { nombre: 'corregir', uso: 'Repetir el último valor dictado cuando necesite corregirlo.' },
+    { nombre: 'pausar', uso: 'Pausar temporalmente la captura por voz.' },
+    { nombre: 'sangrado', uso: 'Indicar el registro de sangrado en el sitio evaluado.' },
+    { nombre: 'movilidad', uso: 'Indicar que va a registrar la movilidad dental.' },
+    { nombre: 'furca', uso: 'Indicar que va a registrar el compromiso de furcación.' },
+    { nombre: 'ausente', uso: 'Marcar el diente como ausente.' },
+    { nombre: 'finalizar', uso: 'Terminar el dictado del examen.' },
   ];
 
-  filtros: { id: Filtro; nombre: string }[] = [
-    { id: 'todas', nombre: 'Todas' },
-    { id: 'paciente', nombre: 'Para el paciente' },
-    { id: 'repasar', nombre: 'Para repasar' },
+  preguntas: Pregunta[] = [
+    {
+      pregunta: '¿Necesito internet?',
+      respuesta: 'Sí. Para el flujo de dictado por voz propuesto, use una conexión activa y Chrome o Edge actualizados.',
+    },
+    {
+      pregunta: '¿Dónde se guardan los datos?',
+      respuesta: 'Esta versión demostrativa no integra un sistema de almacenamiento clínico. Trate la información como temporal y use únicamente datos ficticios.',
+    },
+    {
+      pregunta: '¿DentUCC reemplaza la historia clínica?',
+      respuesta: 'No. Es una herramienta de apoyo para el registro periodontal y no reemplaza la historia clínica ni los protocolos de la institución.',
+    },
   ];
 
-  filtro = signal<Filtro>('todas');
   aviso = signal('');
 
-  seccionesVisibles = computed(() =>
-    this.secciones.filter(s => this.filtro() === 'todas' || s.tipo === this.filtro())
-  );
-
-  contar(f: Filtro): number {
-    return this.recomendaciones.filter(r => f === 'todas' || r.tipo === f).length;
-  }
-
-  de(tipo: Tipo): Recomendacion[] {
-    return this.recomendaciones.filter(r => r.tipo === tipo);
-  }
-
-  // ===== Acciones =====
   exportar(): void {
     window.print();
   }
@@ -103,18 +136,30 @@ export class Recomendaciones {
   compartir(): void {
     const url = location.href;
     if (typeof navigator.share === 'function') {
-      navigator.share({ title: 'Recomendaciones educativas', url }).catch(() => {});
+      navigator
+        .share({ title: 'Guía de uso de DentUCC', url })
+        .catch(() => this.avisar('No se pudo compartir la guía'));
     } else {
       this.copiarTexto(url, 'Enlace copiado');
     }
   }
 
   copiar(): void {
-    const texto = this.recomendaciones.map(r => `• ${r.titulo}: ${r.texto}`).join('\n');
-    this.copiarTexto(texto, 'Recomendaciones copiadas');
+    const recomendaciones = this.recomendaciones
+      .map(recomendacion => `• ${recomendacion.titulo}: ${recomendacion.texto}`)
+      .join('\n');
+    const comandos = this.comandos
+      .map(comando => `• ${comando.nombre}: ${comando.uso}`)
+      .join('\n');
+    this.copiarTexto(`${recomendaciones}\n\nComandos de voz\n${comandos}`, 'Guía copiada');
   }
 
   private copiarTexto(texto: string, mensaje: string): void {
+    if (!navigator.clipboard) {
+      this.avisar('El navegador no permite copiar');
+      return;
+    }
+
     navigator.clipboard
       .writeText(texto)
       .then(() => this.avisar(mensaje))
