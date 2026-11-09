@@ -1,0 +1,45 @@
+<section class="inicio-hero">
+  <!--
+    Video de fondo de toda la seccion.
+    El archivo esta en public/videos/inicio-hero.mp4 (poster opcional en
+    public/videos/inicio-hero-poster.jpg).
+  -->
+  <video
+    class="inicio-hero__video"
+    src="/videos/inicio-heroo.mp4"
+    poster="/videos/inicio-hero-poster.jpg"
+    autoplay
+    muted
+    loop
+    playsinline
+    aria-hidden="true"
+  ></video>
+  <div class="inicio-hero__overlay" aria-hidden="true"></div>
+
+  <div class="inicio-hero__content">
+    <div class="inicio-hero__eyebrow">
+      <span class="inicio-hero__eyebrow-side inicio-hero__eyebrow-side--left" aria-hidden="true">
+        <span class="inicio-hero__eyebrow-bar"></span>
+        <span class="inicio-hero__eyebrow-dot"></span>
+      </span>
+      <p class="inicio-hero__eyebrow-text">Periodontograma por voz</p>
+      <span class="inicio-hero__eyebrow-side inicio-hero__eyebrow-side--right" aria-hidden="true">
+        <span class="inicio-hero__eyebrow-dot"></span>
+        <span class="inicio-hero__eyebrow-bar"></span>
+      </span>
+    </div>
+
+    <h1 class="inicio-hero__title">Dent<span class="inicio-hero__title-accent">ucc</span></h1>
+    <p class="inicio-hero__subtitle">Registra el periodontograma con tu voz.</p>
+
+    <div class="inicio-hero__spacer" aria-hidden="true"></div>
+
+    <div class="inicio-hero__actions">
+      <a routerLink="/registro" class="inicio-hero__cta inicio-hero__cta--primary">
+        <svg aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="2" width="6" height="12" rx="3"></rect><path d="M5 11a7 7 0 0 0 14 0"></path><path d="M12 18v4"></path></svg>
+        Iniciar registro
+      </a>
+      <a routerLink="/historial" class="inicio-hero__cta inicio-hero__cta--secondary">Ver historial</a>
+    </div>
+  </div>
+</section>

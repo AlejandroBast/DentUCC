@@ -1,8 +1,9 @@
 import { Routes } from '@angular/router';
 import { Placeholder } from './placeholder/placeholder';
+import { Inicio } from './inicio/inicio';
 
 export const routes: Routes = [
-  { path: '', component: Placeholder },
+  { path: '', component: Inicio },
   { path: 'registro', component: Placeholder },
   { path: 'diagnostico', component: Placeholder },
   { path: 'recomendaciones', component: Placeholder },
