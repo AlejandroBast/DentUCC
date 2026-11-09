@@ -1,0 +1,156 @@
+<svg width="0" height="0" style="position: absolute" aria-hidden="true" focusable="false">
+  <defs>
+    <symbol id="i-microfono" viewBox="0 0 24 24"><rect x="9" y="2" width="6" height="12" rx="3"/><path d="M5 11a7 7 0 0 0 14 0M12 18v4m-4 0h8"/></symbol>
+    <symbol id="i-preparar" viewBox="0 0 24 24"><path d="M4 5h16v14H4zM8 3v4m8-4v4M8 11h8m-8 4h5"/></symbol>
+    <symbol id="i-revisar" viewBox="0 0 24 24"><path d="M4 4h16v16H4zM8 12l3 3 6-7"/></symbol>
+    <symbol id="i-dispositivo" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="13" rx="2"/><path d="M8 21h8m-4-4v4"/></symbol>
+    <symbol id="i-dictado" viewBox="0 0 24 24"><path d="M4 10v4m4-8v12m4-16v20m4-15v10m4-7v4"/></symbol>
+    <symbol id="i-cuidado" viewBox="0 0 24 24"><path d="M12 22s8-4 8-11V5l-8-3-8 3v6c0 7 8 11 8 11z"/><path d="m9 12 2 2 4-4"/></symbol>
+    <symbol id="i-compartir" viewBox="0 0 24 24"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><path d="m8.6 13.5 6.8 4m0-11-6.8 4"/></symbol>
+    <symbol id="i-copiar" viewBox="0 0 24 24"><rect x="9" y="9" width="12" height="12" rx="2"/><path d="M5 15V5a2 2 0 0 1 2-2h8"/></symbol>
+    <symbol id="i-descarga" viewBox="0 0 24 24"><path d="M12 3v12m0 0-4-4m4 4 4-4M4 21h16"/></symbol>
+  </defs>
+</svg>
+
+<header class="hero">
+  <div class="hero__content">
+    <div class="eyebrow">
+      <span class="eyebrow__side" aria-hidden="true">
+        <span class="eyebrow__bar"></span>
+        <span class="eyebrow__dot"></span>
+      </span>
+      <p class="eyebrow__text">Guía para el operador</p>
+      <span class="eyebrow__side eyebrow__side--right" aria-hidden="true">
+        <span class="eyebrow__dot"></span>
+        <span class="eyebrow__bar"></span>
+      </span>
+    </div>
+
+    <h1 class="hero__title">Recomen<span>daciones</span></h1>
+    <p class="hero__subtitle">Pautas puntuales para preparar, dictar y revisar un registro periodontal con DentUCC.</p>
+
+    <div class="acciones acciones--guia">
+      <span class="guia-operador">Contenido dirigido a quien utiliza la herramienta; no son indicaciones para el paciente.</span>
+      <div class="acciones__botones">
+        <button type="button" class="icono" aria-label="Compartir guía" title="Compartir guía" (click)="compartir()">
+          <svg class="ic"><use href="#i-compartir"/></svg>
+        </button>
+        <button type="button" class="icono" aria-label="Copiar recomendaciones" title="Copiar recomendaciones" (click)="copiar()">
+          <svg class="ic"><use href="#i-copiar"/></svg>
+        </button>
+        <button type="button" class="exportar" (click)="exportar()">
+          <svg class="ic"><use href="#i-descarga"/></svg>Exportar PDF
+        </button>
+      </div>
+    </div>
+  </div>
+</header>
+
+<main>
+  <section class="seccion" aria-labelledby="como-funciona">
+    <div class="seccion-cab">
+      <i class="punto-sec" data-color="lima" aria-hidden="true"></i>
+      <h2 id="como-funciona">Cómo funciona</h2>
+      <span class="nota">Tres pasos para usar el dictado</span>
+    </div>
+    <div class="grid pasos-grid">
+      @for (paso of pasos; track paso.numero) {
+        <article class="card paso-card">
+          <div class="card-top">
+            <span class="ico" aria-hidden="true"><svg class="ic"><use [attr.href]="'#i-' + paso.icono"/></svg></span>
+            <span class="tag">Paso {{ paso.numero }}</span>
+          </div>
+          <h3>{{ paso.titulo }}</h3>
+          <p>{{ paso.texto }}</p>
+        </article>
+      }
+    </div>
+  </section>
+
+  <section class="seccion" aria-labelledby="recomendaciones-uso">
+    <div class="seccion-cab">
+      <i class="punto-sec" data-color="azul" aria-hidden="true"></i>
+      <h2 id="recomendaciones-uso">Recomendaciones de uso</h2>
+      <span class="badge">{{ recomendaciones.length }} pautas</span>
+      <span class="nota">Antes y durante el registro</span>
+    </div>
+    <div class="grid">
+      @for (recomendacion of recomendaciones; track recomendacion.titulo) {
+        <article class="card recomendacion-card">
+          <div class="card-top">
+            <span class="ico" aria-hidden="true"><svg class="ic"><use [attr.href]="'#i-' + recomendacion.icono"/></svg></span>
+            <span class="tag">{{ recomendacion.etiqueta }}</span>
+          </div>
+          <h3>{{ recomendacion.titulo }}</h3>
+          <p>{{ recomendacion.texto }}</p>
+        </article>
+      }
+    </div>
+  </section>
+
+  <section class="seccion" aria-labelledby="comandos-voz">
+    <div class="seccion-cab">
+      <i class="punto-sec" data-color="lima" aria-hidden="true"></i>
+      <h2 id="comandos-voz">Comandos de voz</h2>
+      <span class="nota">Frases de consulta rápida durante el dictado</span>
+    </div>
+    <div class="tabla-contenedor">
+      <table class="tabla-comandos">
+        <thead>
+          <tr><th scope="col">Comando</th><th scope="col">Uso</th></tr>
+        </thead>
+        <tbody>
+          @for (comando of comandos; track comando.nombre) {
+            <tr>
+              <th scope="row"><span class="comando-chip">{{ comando.nombre }}</span></th>
+              <td>{{ comando.uso }}</td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section class="seccion" aria-labelledby="preguntas-frecuentes">
+    <div class="seccion-cab">
+      <i class="punto-sec" data-color="azul" aria-hidden="true"></i>
+      <h2 id="preguntas-frecuentes">Preguntas frecuentes</h2>
+      <span class="nota">Información importante sobre la demostración</span>
+    </div>
+    <div class="faq-grid">
+      @for (pregunta of preguntas; track pregunta.pregunta) {
+        <details class="faq-item">
+          <summary>{{ pregunta.pregunta }}</summary>
+          <p>{{ pregunta.respuesta }}</p>
+        </details>
+      }
+    </div>
+  </section>
+
+  <aside class="aviso-clinico" aria-label="Aviso clínico">
+    <span class="aviso-clinico__icono" aria-hidden="true"><svg class="ic"><use href="#i-cuidado"/></svg></span>
+    <p><strong>Aviso clínico:</strong> DentUCC es una herramienta de apoyo. La orientación diagnóstica es preliminar y no reemplaza el criterio profesional ni la historia clínica.</p>
+  </aside>
+
+  <section class="seccion acerca" aria-labelledby="acerca-proyecto">
+    <div class="seccion-cab">
+      <i class="punto-sec" data-color="lima" aria-hidden="true"></i>
+      <h2 id="acerca-proyecto">Acerca del proyecto</h2>
+    </div>
+    <div class="acerca-card">
+      <div>
+        <span class="tag">Proyecto de tesis</span>
+        <h3>DentUCC</h3>
+        <p>Propuesta académica que explora el uso del dictado por voz como apoyo para registrar y revisar información periodontal.</p>
+      </div>
+      <div class="acerca-datos">
+        <p><strong>Equipo</strong><span>Equipo de trabajo de la tesis DentUCC</span></p>
+        <p><strong>Universidad</strong><span>Universidad Cooperativa de Colombia (UCC)</span></p>
+      </div>
+    </div>
+  </section>
+</main>
+
+@if (aviso()) {
+  <div class="toast" role="status">{{ aviso() }}</div>
+}
