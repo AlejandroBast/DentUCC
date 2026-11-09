@@ -1,0 +1,65 @@
+<div class="grafica__cabecera">
+  <div>
+    <h2 class="grafica__titulo">Por <strong>cuadrante</strong></h2>
+    <p class="grafica__subtitulo">
+      {{ grafica().subtitulo }}
+      @if (grafica().umbral !== null) {
+        <span class="grafica__leyenda"><i></i>umbral 10&nbsp;%</span>
+      }
+    </p>
+  </div>
+
+  <div class="grafica__selector" role="group" aria-label="Qué mostrar en la gráfica">
+    @for (boton of botones; track boton.id) {
+      <button
+        type="button"
+        class="grafica__opcion"
+        [class.grafica__opcion--activa]="vista() === boton.id"
+        [attr.aria-pressed]="vista() === boton.id"
+        (click)="vista.set(boton.id)"
+      >
+        {{ boton.texto }}
+      </button>
+    }
+  </div>
+</div>
+
+<div class="grafica__lienzo">
+  <div class="grafica__capa" aria-hidden="true">
+    @for (linea of grafica().lineas; track linea) {
+      <div class="grafica__guia" [style.bottom.%]="(linea / grafica().maximo) * 100">
+        <span>{{ linea }}</span>
+      </div>
+    }
+  </div>
+
+  <div class="grafica__capa grafica__barras">
+    @for (barra of grafica().barras; track barra.etiqueta) {
+      <div class="grafica__columna">
+        <div
+          class="grafica__barra"
+          role="img"
+          [style.height.%]="barra.altura"
+          [attr.aria-label]="barra.etiqueta + ': ' + barra.texto"
+        >
+          <span class="grafica__valor">{{ barra.texto }}</span>
+        </div>
+      </div>
+    }
+  </div>
+
+  @if (grafica().umbral !== null) {
+    <div class="grafica__capa" aria-hidden="true">
+      <div class="grafica__guia grafica__guia--umbral" [style.bottom.%]="grafica().umbral"></div>
+    </div>
+  }
+</div>
+
+<div class="grafica__etiquetas">
+  @for (barra of grafica().barras; track barra.etiqueta) {
+    <div>
+      <strong>{{ barra.etiqueta }}</strong>
+      <small>{{ barra.rango }}</small>
+    </div>
+  }
+</div>
