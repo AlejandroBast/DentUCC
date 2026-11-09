@@ -1,0 +1,218 @@
+<header class="hero">
+  <div class="eyebrow">
+    <span class="eyebrow__side" aria-hidden="true">
+      <span class="eyebrow__bar"></span>
+      <span class="eyebrow__dot"></span>
+    </span>
+    <p class="eyebrow__text">Demo interactiva</p>
+    <span class="eyebrow__side eyebrow__side--right" aria-hidden="true">
+      <span class="eyebrow__dot"></span>
+      <span class="eyebrow__bar"></span>
+    </span>
+  </div>
+  <h1 class="hero__title">Periodonto<span>grama</span></h1>
+  <p class="hero__subtitle">Seis sitios por diente. El gráfico y los índices se actualizan mientras registras.</p>
+</header>
+
+<main>
+  <!-- Datos del examen: texto editable en línea, sin cajas -->
+  <section class="ficha" aria-label="Datos del examen">
+    <label class="campo campo--ancho">
+      <span>Paciente</span>
+      <input [value]="paciente" placeholder="Nombre del paciente" (input)="paciente = valor($event)" />
+    </label>
+    <label class="campo">
+      <span>Historia</span>
+      <input [value]="historia" placeholder="HC-0000" (input)="historia = valor($event)" />
+    </label>
+    <label class="campo">
+      <span>Fecha</span>
+      <input [value]="fecha" placeholder="dd/mm/aaaa" (input)="fecha = valor($event)" />
+    </label>
+    <label class="campo campo--ancho">
+      <span>Clínico</span>
+      <input [value]="clinico" placeholder="Nombre del clínico" (input)="clinico = valor($event)" />
+    </label>
+    <div class="campo">
+      <span>Examen</span>
+      <div class="opciones" role="group" aria-label="Tipo de examen">
+        <button type="button" [attr.aria-pressed]="examen() === 'inicial'" (click)="examen.set('inicial')">Inicial</button>
+        <button type="button" [attr.aria-pressed]="examen() === 'reevaluacion'" (click)="examen.set('reevaluacion')">Reevaluación</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- Índices -->
+  <section class="indices" aria-label="Índices del examen" aria-live="polite">
+    @for (i of indices(); track i.etq) {
+      <div class="indice" [attr.data-tono]="i.tono">
+        <strong>{{ i.valor }}<small>{{ i.unidad }}</small></strong>
+        <span>{{ i.etq }}</span>
+      </div>
+    }
+  </section>
+
+  <div class="barra">
+    <p class="ayuda">
+      Escribe un dígito y salta al siguiente sitio · <kbd>←</kbd><kbd>→</kbd><kbd>↑</kbd><kbd>↓</kbd> para moverte ·
+      <kbd>-</kbd> para recesión · toca el número de un diente para marcarlo ausente
+    </p>
+    <div class="barra__acciones">
+      <button type="button" class="boton" (click)="cargarEjemplo()">Cargar ejemplo</button>
+      <button type="button" class="boton" (click)="limpiar()">Limpiar</button>
+      <button type="button" class="boton boton--primario" (click)="imprimir()">
+        <svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 9V3h12v6M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2M6 14h12v7H6z" /></svg>
+        Imprimir
+      </button>
+    </div>
+  </div>
+
+  <!-- Carta periodontal -->
+  <div class="carta">
+    @for (a of arcadas; track a.id) {
+      <section class="arcada" [attr.aria-label]="a.titulo">
+        <h2 class="arcada__titulo"><i [attr.data-arcada]="a.id"></i>{{ a.titulo }}</h2>
+
+        @if (a.id === 'sup') {
+          <ng-container *ngTemplateOutlet="cabeceraTpl; context: { a: a }" />
+        }
+        @for (b of a.bloques; track b.cara) {
+          <ng-container *ngTemplateOutlet="bloqueTpl; context: { a: a, b: b }" />
+        }
+        @if (a.id === 'inf') {
+          <ng-container *ngTemplateOutlet="cabeceraTpl; context: { a: a }" />
+        }
+      </section>
+    }
+  </div>
+
+  <ul class="leyenda" aria-label="Leyenda">
+    <li><i class="l-mg"></i>Margen gingival</li>
+    <li><i class="l-ps"></i>Fondo de bolsa</li>
+    <li><i class="l-bolsa"></i>Bolsa periodontal</li>
+    <li><i class="l-sangrado"></i>Sangrado</li>
+    <li><i class="l-placa"></i>Placa</li>
+    <li><i class="l-furca"></i>Furcación (grado I–III)</li>
+    <li class="leyenda__nota">NIC = PS − MG · MG negativo = recesión</li>
+  </ul>
+</main>
+
+<!-- ===== Filas de diente: número, implante, movilidad ===== -->
+<ng-template #cabeceraTpl let-a="a">
+  @for (c of a.cabecera; track c) {
+    <div class="fila" [class.fila--num]="c === 'num'">
+      <span class="etq">{{ c === 'num' ? 'Diente' : c === 'imp' ? 'Implante' : 'Movilidad' }}</span>
+      @for (d of a.dientes; track d.n; let i = $index) {
+        <div class="celda" [class.celda--medio]="i === 8" [class.celda--ausente]="d.ausente">
+          @switch (c) {
+            @case ('num') {
+              <button type="button" class="num" [attr.aria-pressed]="d.ausente"
+                [attr.aria-label]="'Diente ' + d.n + (d.ausente ? ', ausente' : '')" title="Marcar como ausente"
+                (click)="alternarAusente(d)">{{ d.n }}</button>
+            }
+            @case ('imp') {
+              <button type="button" class="imp" [class.on]="d.implante" [disabled]="d.ausente"
+                [attr.aria-pressed]="d.implante" [attr.aria-label]="'Implante en ' + d.n"
+                (click)="alternarImplante(d)">{{ d.implante ? 'IMP' : '' }}</button>
+            }
+            @case ('mov') {
+              <button type="button" class="mov" [attr.data-g]="d.movilidad" [disabled]="d.ausente"
+                [attr.aria-label]="'Movilidad ' + d.n + ': ' + d.movilidad"
+                (click)="ciclarMovilidad(d)">{{ d.movilidad }}</button>
+            }
+          }
+        </div>
+      }
+    </div>
+  }
+</ng-template>
+
+<!-- ===== Cara (vestibular / palatina / lingual): filas + gráfico ===== -->
+<ng-template #bloqueTpl let-a="a" let-b="b">
+  @if (!b.raicesArriba) {
+    <ng-container *ngTemplateOutlet="graficoTpl; context: { a: a, b: b }" />
+  }
+
+  @for (f of b.filas; track f) {
+    <div class="fila" [attr.data-tipo]="f">
+      <span class="etq">{{ etiqueta(f) }}</span>
+      @for (d of a.dientes; track d.n; let i = $index) {
+        @let s = d[b.cara];
+        <div class="celda" [class.celda--medio]="i === 8" [class.celda--ausente]="d.ausente">
+          @switch (f) {
+            @case ('furca') {
+              <div class="furcas">
+                @for (g of d.implante ? [] : s.furca; track $index; let k = $index) {
+                  <button type="button" class="furca" [style.--g]="g" [attr.data-g]="g" [disabled]="d.ausente"
+                    [attr.aria-label]="'Furcación ' + d.n + ' grado ' + g" (click)="ciclarFurca(s, k)"></button>
+                }
+              </div>
+            }
+            @case ('sangrado') {
+              @for (k of [0, 1, 2]; track k) {
+                <button type="button" class="punto punto--sangrado" [class.on]="s.sangrado[k]" [disabled]="d.ausente"
+                  [attr.aria-pressed]="s.sangrado[k]" [attr.aria-label]="'Sangrado ' + d.n + ' sitio ' + (k + 1)"
+                  (click)="alternar(s, 'sangrado', k)"></button>
+              }
+            }
+            @case ('placa') {
+              @for (k of [0, 1, 2]; track k) {
+                <button type="button" class="punto punto--placa" [class.on]="s.placa[k]" [disabled]="d.ausente"
+                  [attr.aria-pressed]="s.placa[k]" [attr.aria-label]="'Placa ' + d.n + ' sitio ' + (k + 1)"
+                  (click)="alternar(s, 'placa', k)"></button>
+              }
+            }
+            @default {
+              @for (k of [0, 1, 2]; track k) {
+                <input class="valor" type="text" inputmode="numeric" maxlength="3" autocomplete="off"
+                  [attr.data-nivel]="f === 'ps' ? nivel(s.ps[k]) : null"
+                  [attr.data-fila]="a.id + '-' + b.cara + '-' + f" [attr.data-arcada]="a.id" [attr.data-idx]="i * 3 + k"
+                  [attr.aria-label]="etiqueta(f) + ' ' + d.n + ' sitio ' + (k + 1)"
+                  [value]="txt(s[f][k])" [disabled]="d.ausente"
+                  (focus)="$any($event.target).select()" (input)="entrada($event, s, f, k)" (keydown)="tecla($event)" />
+              }
+            }
+          }
+        </div>
+      }
+    </div>
+  }
+
+  @if (b.raicesArriba) {
+    <ng-container *ngTemplateOutlet="graficoTpl; context: { a: a, b: b }" />
+  }
+</ng-template>
+
+<!-- ===== Gráfico de dientes con margen gingival y fondo de bolsa ===== -->
+<ng-template #graficoTpl let-a="a" let-b="b">
+  @let cej = b.raicesArriba ? CEJ_ARRIBA : CEJ_ABAJO;
+  @let l = lineas(a.dientes, b.cara, b.raicesArriba);
+  <div class="fila fila--grafico">
+    <span class="etq etq--grafico">{{ b.titulo }}</span>
+    <svg class="grafico" [attr.viewBox]="'0 0 ' + ANCHO_SVG + ' ' + ALTO" [attr.width]="ANCHO_SVG" [attr.height]="ALTO"
+      role="img" [attr.aria-label]="a.titulo + ', cara ' + b.titulo">
+      @for (k of rejilla; track k) {
+        <line class="mm" [class.mm--5]="k % 5 === 0" x1="0" [attr.x2]="ANCHO_SVG"
+          [attr.y1]="y(cej, k, b.raicesArriba)" [attr.y2]="y(cej, k, b.raicesArriba)" />
+      }
+      <line class="medio" [attr.x1]="COL * 8" [attr.x2]="COL * 8" y1="0" [attr.y2]="ALTO" />
+
+      @for (d of a.dientes; track d.n; let i = $index) {
+        <g class="diente" [class.diente--ausente]="d.ausente" [attr.transform]="transformar(i, cej, b.raicesArriba)">
+          @if (d.implante) {
+            <path class="fijacion" [attr.d]="d.fijacion" />
+            <path class="roscas" [attr.d]="d.roscas" />
+          } @else {
+            <path class="raiz" [attr.d]="d.raiz" />
+          }
+          <path class="corona" [class.corona--protesis]="d.implante" [attr.d]="d.corona" />
+        </g>
+      }
+
+      <line class="cej" x1="0" [attr.x2]="ANCHO_SVG" [attr.y1]="cej" [attr.y2]="cej" />
+      <path class="bolsa" [attr.d]="l.area" />
+      <path class="linea-ps" [attr.d]="l.ps" />
+      <path class="linea-mg" [attr.d]="l.mg" />
+    </svg>
+  </div>
+</ng-template>
