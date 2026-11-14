@@ -2,6 +2,7 @@ import { Component, ElementRef, computed, inject, signal } from '@angular/core';
 import { NgTemplateOutlet } from '@angular/common';
 import { RouterLink } from '@angular/router';
 import { DiagnosticoService } from '../diagnostico/diagnostico.service';
+import { Periodontograma } from '../diagnostico/diagnostico.models';
 
 type Cara = 'v' | 'p';
 type Campo = 'mg' | 'ps';
@@ -324,39 +325,30 @@ export class Demo {
 
   /** Comparte con Diagnóstico el resumen calculado a partir del registro actual. */
   private actualizarDiagnostico(): void {
-    const cuadrantes = [0, 0, 0, 0].map(() => ({ medidos: 0, ps: 0, sangrado: 0, ps4: 0 }));
-    for (const d of [...this.sup, ...this.inf]) {
-      if (d.ausente) continue;
-      const q = d.n < 20 ? 0 : d.n < 30 ? 1 : d.n < 40 ? 2 : 3;
-      for (const s of [d.v, d.p]) {
-        for (let k = 0; k < 3; k++) {
-          if (s.sangrado[k]) cuadrantes[q].sangrado++;
-          const ps = s.ps[k];
-          if (ps === null) continue;
-          cuadrantes[q].medidos++;
-          cuadrantes[q].ps += ps;
-          if (ps >= 4) cuadrantes[q].ps4++;
-        }
-      }
-    }
-    const total = cuadrantes.reduce((sum, q) => sum + q.medidos, 0);
-    const sumaPs = cuadrantes.reduce((sum, q) => sum + q.ps, 0);
-    const sangrado = cuadrantes.reduce((sum, q) => sum + q.sangrado, 0);
-    this.diagnostico.actualizar({
-      paciente: this.paciente,
-      historia: this.historia,
+    const periodontograma: Periodontograma = {
+      paciente: this.paciente || 'Paciente sin nombre',
+      historiaClinica: this.historia || 'Sin historia clínica',
       fecha: this.fecha,
-      sitiosMedidos: total,
-      sitiosDisponibles: 192,
-      profundidadPromedio: total ? sumaPs / total : 0,
-      sangradoPorcentaje: total ? Math.round((sangrado / total) * 100) : 0,
-      sitiosProfundos: cuadrantes.reduce((sum, q) => sum + q.ps4, 0),
-      cuadrantes: {
-        profundidad: cuadrantes.map(q => q.medidos ? q.ps / q.medidos : 0),
-        sangrado: cuadrantes.map(q => q.medidos ? Math.round((q.sangrado / q.medidos) * 100) : 0),
-        riesgo: cuadrantes.map(q => q.ps4),
-      },
-    });
+      dientes: [...this.sup, ...this.inf]
+        .filter((d) => !d.ausente)
+        .map((d) => ({
+          numero: d.n,
+          vestibular: this.convertirCara(d.v),
+          palatinoLingual: this.convertirCara(d.p),
+        })),
+    };
+    this.diagnostico.cargar(periodontograma);
+  }
+
+  private convertirCara(sitios: Sitios): Periodontograma['dientes'][number]['vestibular'] {
+    if (sitios.ps.some((profundidad) => profundidad === null)) {
+      return null;
+    }
+    return [
+      { profundidad: sitios.ps[0]!, sangrado: sitios.sangrado[0] },
+      { profundidad: sitios.ps[1]!, sangrado: sitios.sangrado[1] },
+      { profundidad: sitios.ps[2]!, sangrado: sitios.sangrado[2] },
+    ];
   }
 
   alternarAusente(d: Diente): void {
