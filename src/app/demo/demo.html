@@ -19,19 +19,19 @@
   <section class="ficha" aria-label="Datos del examen">
     <label class="campo campo--ancho">
       <span>Paciente</span>
-      <input [value]="paciente" placeholder="Nombre del paciente" (input)="paciente = valor($event)" />
+      <input [value]="paciente" placeholder="Nombre del paciente" (input)="actualizarCampo('paciente', $event)" />
     </label>
     <label class="campo">
       <span>Historia</span>
-      <input [value]="historia" placeholder="HC-0000" (input)="historia = valor($event)" />
+      <input [value]="historia" placeholder="HC-0000" (input)="actualizarCampo('historia', $event)" />
     </label>
     <label class="campo">
       <span>Fecha</span>
-      <input [value]="fecha" placeholder="dd/mm/aaaa" (input)="fecha = valor($event)" />
+      <input [value]="fecha" placeholder="dd/mm/aaaa" (input)="actualizarCampo('fecha', $event)" />
     </label>
     <label class="campo campo--ancho">
       <span>Clínico</span>
-      <input [value]="clinico" placeholder="Nombre del clínico" (input)="clinico = valor($event)" />
+      <input [value]="clinico" placeholder="Nombre del clínico" (input)="actualizarCampo('clinico', $event)" />
     </label>
     <div class="campo">
       <span>Examen</span>
@@ -60,6 +60,7 @@
     <div class="barra__acciones">
       <button type="button" class="boton" (click)="cargarEjemplo()">Cargar ejemplo</button>
       <button type="button" class="boton" (click)="limpiar()">Limpiar</button>
+      <a class="boton" routerLink="/diagnostico">Ver orientación</a>
       <button type="button" class="boton boton--primario" (click)="imprimir()">
         <svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 9V3h12v6M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2M6 14h12v7H6z" /></svg>
         Imprimir
