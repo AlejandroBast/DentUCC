@@ -12,5 +12,8 @@ export const routes: Routes = [
     loadComponent: () => import('./diagnostico/diagnostico').then((m) => m.Diagnostico),
   },
   { path: 'recomendaciones', component: Recomendaciones },
-  { path: 'historial', component: Placeholder },
+  {
+    path: 'historial',
+    loadComponent: () => import('./historial/historial').then((m) => m.Historial),
+  },
 ];
