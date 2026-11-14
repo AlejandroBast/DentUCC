@@ -1,5 +1,7 @@
 import { Component, ElementRef, computed, inject, signal } from '@angular/core';
 import { NgTemplateOutlet } from '@angular/common';
+import { RouterLink } from '@angular/router';
+import { DiagnosticoService } from '../diagnostico/diagnostico.service';
 
 type Cara = 'v' | 'p';
 type Campo = 'mg' | 'ps';
@@ -153,12 +155,13 @@ function crearDiente(n: number): Diente {
 
 @Component({
   selector: 'app-demo',
-  imports: [NgTemplateOutlet],
+  imports: [NgTemplateOutlet, RouterLink],
   templateUrl: './demo.html',
   styleUrl: './demo.css',
 })
 export class Demo {
   private readonly host = inject<ElementRef<HTMLElement>>(ElementRef);
+  private readonly diagnostico = inject(DiagnosticoService);
 
   protected readonly COL = COL;
   protected readonly ALTO = ALTO;
@@ -316,6 +319,44 @@ export class Demo {
   // ===== Edición =====
   private tocar(): void {
     this.rev.update(v => v + 1);
+    this.actualizarDiagnostico();
+  }
+
+  /** Comparte con Diagnóstico el resumen calculado a partir del registro actual. */
+  private actualizarDiagnostico(): void {
+    const cuadrantes = [0, 0, 0, 0].map(() => ({ medidos: 0, ps: 0, sangrado: 0, ps4: 0 }));
+    for (const d of [...this.sup, ...this.inf]) {
+      if (d.ausente) continue;
+      const q = d.n < 20 ? 0 : d.n < 30 ? 1 : d.n < 40 ? 2 : 3;
+      for (const s of [d.v, d.p]) {
+        for (let k = 0; k < 3; k++) {
+          if (s.sangrado[k]) cuadrantes[q].sangrado++;
+          const ps = s.ps[k];
+          if (ps === null) continue;
+          cuadrantes[q].medidos++;
+          cuadrantes[q].ps += ps;
+          if (ps >= 4) cuadrantes[q].ps4++;
+        }
+      }
+    }
+    const total = cuadrantes.reduce((sum, q) => sum + q.medidos, 0);
+    const sumaPs = cuadrantes.reduce((sum, q) => sum + q.ps, 0);
+    const sangrado = cuadrantes.reduce((sum, q) => sum + q.sangrado, 0);
+    this.diagnostico.actualizar({
+      paciente: this.paciente,
+      historia: this.historia,
+      fecha: this.fecha,
+      sitiosMedidos: total,
+      sitiosDisponibles: 192,
+      profundidadPromedio: total ? sumaPs / total : 0,
+      sangradoPorcentaje: total ? Math.round((sangrado / total) * 100) : 0,
+      sitiosProfundos: cuadrantes.reduce((sum, q) => sum + q.ps4, 0),
+      cuadrantes: {
+        profundidad: cuadrantes.map(q => q.medidos ? q.ps / q.medidos : 0),
+        sangrado: cuadrantes.map(q => q.medidos ? Math.round((q.sangrado / q.medidos) * 100) : 0),
+        riesgo: cuadrantes.map(q => q.ps4),
+      },
+    });
   }
 
   alternarAusente(d: Diente): void {
@@ -484,5 +525,10 @@ export class Demo {
 
   valor(ev: Event): string {
     return (ev.target as HTMLInputElement).value;
+  }
+
+  actualizarCampo(campo: 'paciente' | 'historia' | 'fecha' | 'clinico', ev: Event): void {
+    this[campo] = this.valor(ev);
+    this.actualizarDiagnostico();
   }
 }
