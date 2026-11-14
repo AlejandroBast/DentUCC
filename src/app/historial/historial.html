@@ -1,0 +1,56 @@
+<section class="historial">
+  <header class="historial__hero">
+    <div class="eyebrow"><span></span><p>Registros clínicos</p><span></span></div>
+    <h1>HISTORIAL <strong>PERIODONTAL</strong></h1>
+    <p>Consulta los registros realizados, sus indicadores principales y el estado de seguimiento.</p>
+  </header>
+
+  <main>
+    <section class="overview" aria-label="Resumen de registros">
+      <article><span class="overview__icon">▤</span><p>Registros totales</p><strong>24</strong><small>En el periodo actual</small></article>
+      <article><span class="overview__icon overview__icon--blue">✓</span><p>Completados</p><strong>19</strong><small>Con orientación disponible</small></article>
+      <article><span class="overview__icon overview__icon--amber">◷</span><p>En revisión</p><strong>3</strong><small>Requieren validación</small></article>
+    </section>
+
+    <section class="records" aria-labelledby="records-title">
+      <div class="records__head">
+        <div><p class="records__eyebrow">Base de registros</p><h2 id="records-title">Actividad reciente</h2></div>
+        <a routerLink="/registro" class="new-record"><b>+</b> Nuevo registro</a>
+      </div>
+      <div class="filters" role="group" aria-label="Filtrar registros">
+        @for (item of filtros; track item) {
+          <button type="button" [class.is-active]="filtro() === item" (click)="filtrar(item)">{{ item }}</button>
+        }
+      </div>
+
+      <div class="records__layout">
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Registro</th><th>Paciente</th><th>Fecha</th><th>Estado</th><th aria-label="Ver detalle"></th></tr></thead>
+            <tbody>
+              @for (registro of visibles(); track registro.id) {
+                <tr [class.is-selected]="registro.id === seleccionado()" (click)="seleccionar(registro.id)" tabindex="0" (keydown.enter)="seleccionar(registro.id)">
+                  <td><strong>{{ registro.id }}</strong><small>{{ registro.historia }}</small></td>
+                  <td><b>{{ registro.paciente }}</b><small>{{ registro.profesional }}</small></td>
+                  <td>{{ registro.fecha }}</td>
+                  <td><span class="status" [attr.data-status]="registro.estado">{{ registro.estado }}</span></td>
+                  <td class="arrow">→</td>
+                </tr>
+              } @empty { <tr><td colspan="5" class="empty">No hay registros con este filtro.</td></tr> }
+            </tbody>
+          </table>
+        </div>
+
+        <aside class="detail" aria-live="polite">
+          <p class="detail__eyebrow">Registro seleccionado</p>
+          <h3>{{ registroSeleccionado().id }}</h3>
+          <p class="detail__patient">{{ registroSeleccionado().paciente }}</p>
+          <div class="detail__state"><span class="status" [attr.data-status]="registroSeleccionado().estado">{{ registroSeleccionado().estado }}</span><span>{{ registroSeleccionado().fecha }}</span></div>
+          <dl><div><dt>Profundidad promedio</dt><dd>{{ registroSeleccionado().profundidad }}</dd></div><div><dt>Sangrado al sondaje</dt><dd>{{ registroSeleccionado().sangrado }}</dd></div></dl>
+          <p class="detail__note"><i></i>{{ registroSeleccionado().nota }}</p>
+          <a routerLink="/diagnostico" class="detail__link">Ver orientación <b>→</b></a>
+        </aside>
+      </div>
+    </section>
+  </main>
+</section>
