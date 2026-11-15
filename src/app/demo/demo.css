@@ -321,6 +321,13 @@ kbd {
   transition: transform 0.3s var(--ease), background 0.3s var(--ease);
 }
 
+a.boton {
+  display: inline-flex;
+  align-items: center;
+  text-decoration: none;
+  color: var(--tinta);
+}
+
 .boton--primario {
   border: 0;
   font-weight: 700;

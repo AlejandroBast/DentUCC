@@ -1,4 +1,4 @@
-import { Service, computed, signal } from '@angular/core';
+import { Injectable, computed, signal } from '@angular/core';
 import { PERIODONTOGRAMA_EJEMPLO } from './datos-ejemplo';
 import {
   Diente,
@@ -13,7 +13,7 @@ export const BOLSA_MM = 4;
 export const UMBRAL_SANGRADO = 10;
 export const UMBRAL_GENERALIZADO = 30;
 
-@Service()
+@Injectable({ providedIn: 'root' })
 export class DiagnosticoService {
   private periodontogramaActual = signal<Periodontograma>(PERIODONTOGRAMA_EJEMPLO);
 

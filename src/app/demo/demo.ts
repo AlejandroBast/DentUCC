@@ -1,5 +1,8 @@
 import { Component, ElementRef, computed, inject, signal } from '@angular/core';
 import { NgTemplateOutlet } from '@angular/common';
+import { RouterLink } from '@angular/router';
+import { DiagnosticoService } from '../diagnostico/diagnostico.service';
+import { Periodontograma } from '../diagnostico/diagnostico.models';
 
 type Cara = 'v' | 'p';
 type Campo = 'mg' | 'ps';
@@ -153,12 +156,13 @@ function crearDiente(n: number): Diente {
 
 @Component({
   selector: 'app-demo',
-  imports: [NgTemplateOutlet],
+  imports: [NgTemplateOutlet, RouterLink],
   templateUrl: './demo.html',
   styleUrl: './demo.css',
 })
 export class Demo {
   private readonly host = inject<ElementRef<HTMLElement>>(ElementRef);
+  private readonly diagnostico = inject(DiagnosticoService);
 
   protected readonly COL = COL;
   protected readonly ALTO = ALTO;
@@ -316,6 +320,35 @@ export class Demo {
   // ===== Edición =====
   private tocar(): void {
     this.rev.update(v => v + 1);
+    this.actualizarDiagnostico();
+  }
+
+  /** Comparte con Diagnóstico el resumen calculado a partir del registro actual. */
+  private actualizarDiagnostico(): void {
+    const periodontograma: Periodontograma = {
+      paciente: this.paciente || 'Paciente sin nombre',
+      historiaClinica: this.historia || 'Sin historia clínica',
+      fecha: this.fecha,
+      dientes: [...this.sup, ...this.inf]
+        .filter((d) => !d.ausente)
+        .map((d) => ({
+          numero: d.n,
+          vestibular: this.convertirCara(d.v),
+          palatinoLingual: this.convertirCara(d.p),
+        })),
+    };
+    this.diagnostico.cargar(periodontograma);
+  }
+
+  private convertirCara(sitios: Sitios): Periodontograma['dientes'][number]['vestibular'] {
+    if (sitios.ps.some((profundidad) => profundidad === null)) {
+      return null;
+    }
+    return [
+      { profundidad: sitios.ps[0]!, sangrado: sitios.sangrado[0] },
+      { profundidad: sitios.ps[1]!, sangrado: sitios.sangrado[1] },
+      { profundidad: sitios.ps[2]!, sangrado: sitios.sangrado[2] },
+    ];
   }
 
   alternarAusente(d: Diente): void {
@@ -484,5 +517,10 @@ export class Demo {
 
   valor(ev: Event): string {
     return (ev.target as HTMLInputElement).value;
+  }
+
+  actualizarCampo(campo: 'paciente' | 'historia' | 'fecha' | 'clinico', ev: Event): void {
+    this[campo] = this.valor(ev);
+    this.actualizarDiagnostico();
   }
 }
