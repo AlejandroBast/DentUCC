@@ -13,7 +13,8 @@ export const routes: Routes = [
   },
   { path: 'recomendaciones', component: Recomendaciones },
   {
-    path: 'historial',
+  
     loadComponent: () => import('./historial/historial').then((m) => m.Historial),
   },
+  { path: 'historial', component: Placeholder },
 ];
